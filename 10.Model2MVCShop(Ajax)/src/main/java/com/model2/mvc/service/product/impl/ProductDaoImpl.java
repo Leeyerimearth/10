@@ -103,4 +103,10 @@ public class ProductDaoImpl implements ProductDao {
 		return sqlSession.selectList("ProductMapper.getBestSellerList");
 	}
 
+	@Override
+	public List<String> getAllProductList(Search search) {
+		// TODO Auto-generated method stub
+		return sqlSession.selectList("ProductMapper.getAllProductList", search);
+	}
+
 }

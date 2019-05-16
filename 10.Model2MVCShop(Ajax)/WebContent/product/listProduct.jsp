@@ -31,8 +31,13 @@
 <head>
 <title>상품 목록조회</title>
 
+<meta charset="EUC-KR">
+
 <link rel="stylesheet" href="/css/admin.css" type="text/css">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
 <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 
 <script type="text/javascript">
@@ -47,7 +52,39 @@ function fncGetProductList(currentPage){
 	//document.getElementById("currentPage").value = currentPage;
 	//document.detailForm.submit();
 }
-
+	
+function fncAutoComplete(){
+	
+	$.ajax({
+		
+		 url :"/common/json/autocomplete",
+		 method : "POST",
+		 headers : { // 보내는거 json
+				"Accept" : "application/json",
+				"Content-Type" : "application/json"
+			},
+		 data: JSON.stringify({ //보내는 data jsonString 화
+			 		table : "product",
+			 		searchKeyword : $("input[name=searchKeyword]").val(),
+			 		searchCondition : $("select[name=searchCondition]").val()
+			   }),
+		 dataType : "text",
+		 success : function(serverData, status){
+			
+			var array = JSON.parse(serverData);
+		
+			//alert(array);
+			$("input#auto").autocomplete({
+				source : array
+			});
+			
+		 }
+	
+	 });
+	
+}
+	
+	
 	$(function(){ 
 		
 		///////////////////////jQuery 검색 post
@@ -75,28 +112,40 @@ function fncGetProductList(currentPage){
 		})
 		
 		
+		$("input[name=searchKeyword]").keyup(function() {
+
+			fncAutoComplete();
+		});
+		
+		$("#highPrice").click(function(){
+			
+			alert("highPrice");
+			fncGetProductList(1);
+		});
+		
+		$("#lowPrice").click(function(){
+			
+			alert("lowPrice");
+			fncGetProductList(1);
+		})
+		
+
 		//productName글씨 빨간색으로 변경	
-		$( ".ct_list_pop td:nth-child(3)" ).css("color" , "red");
-		$("h7").css("color" , "red");	
-		
-		
+		$(".ct_list_pop td:nth-child(3)").css("color", "red");
+		$("h7").css("color", "red");
+
 		//==> 아래와 같이 정의한 이유는 ??
 		//==> 아래의 주석을 하나씩 풀어 가며 이해하세요.					
-		$(".ct_list_pop:nth-child(4n+6)" ).css("background-color" , "whitesmoke");
+		$(".ct_list_pop:nth-child(4n+6)").css("background-color", "whitesmoke");
 		//console.log ( $(".ct_list_pop:nth-child(1)" ).html() );
 		//console.log ( $(".ct_list_pop:nth-child(2)" ).html() );
 		//console.log ( $(".ct_list_pop:nth-child(3)" ).html() );
-		console.log ( $(".ct_list_pop:nth-child(4)" ).html() ); //==> ok
+		console.log($(".ct_list_pop:nth-child(4)").html()); //==> ok
 		//console.log ( $(".ct_list_pop:nth-child(5)" ).html() ); 
 		//console.log ( $(".ct_list_pop:nth-child(6)" ).html() ); //==> ok
 		//console.log ( $(".ct_list_pop:nth-child(7)" ).html() ); 
-		
-		
-		
+
 	});
-
-
-
 </script>
 </head>
 
@@ -131,6 +180,16 @@ function fncGetProductList(currentPage){
 
 <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:10px;">
 	<tr>
+		
+		<td align="left">
+			<select name="orderCondition" class="ct_input_g" style="width:100px">
+				<option value="0" id="default"   ${!empty search.orderCondition && search.orderCondition==0 ? "selected" : "" }>--정렬--</option>
+				<option value="1" id="highPrice" ${!empty search.orderCondition && search.orderCondition==1 ? "selected" : "" }>가격높은순</option>
+				<option value="2" id="lowPrice"  ${!empty search.orderCondition && search.orderCondition==2 ? "selected" : "" }>가격낮은순</option>
+				
+			</select>
+		</td>
+	
 		<td align="right">
 			<select name="searchCondition" class="ct_input_g" style="width:80px">
 					<%--
@@ -143,7 +202,7 @@ function fncGetProductList(currentPage){
 					<option value="2" ${!empty search.searchCondition && search.searchCondition==2 ? "selected" : "" }>상품가격</option>
 			</select>
 				    <input type ="text" name="searchKeyword" value= "${!empty search.searchKeyword ? search.searchKeyword : "" }"
-				    	class="ct_input_g" style ="width:200px; height:19px">
+				    	id="auto" class="ct_input_g" style ="width:200px; height:19px">
 		 </td>
 
 		<td align="right" width="70">

@@ -19,4 +19,7 @@ public interface ProductService {
 	public Map<String,Object> getProductList(Search search)throws Exception; // ±×³É productlist
 	
 	public List<Product> getBestSellerList();
+	
+	public List getAllProductList(Search search);
+	
 }

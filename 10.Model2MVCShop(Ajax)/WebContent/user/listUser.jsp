@@ -13,7 +13,10 @@
 	<link rel="stylesheet" href="/css/admin.css" type="text/css">
 	
 	<!-- CDN(Content Delivery Network) 호스트 사용 -->
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+	<link rel="stylesheet" href="/resources/demos/style.css">
 	<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 	<script type="text/javascript">
 	
 		// 검색 / page 두가지 경우 모두 Form 전송을 위해 JavaScrpt 이용  
@@ -22,8 +25,55 @@
 			$("form").attr("method" , "POST").attr("action" , "/user/listUser").submit();
 		}
 
+		function fncAutoComplete(){
+			
+			$.ajax({
+				
+				 url :"/common/json/autocomplete",
+				 method : "POST",
+				 headers : { // 보내는거 json
+						"Accept" : "application/json",
+						"Content-Type" : "application/json"
+					},
+				 data: JSON.stringify({ //보내는 data jsonString 화
+					 		table : "user",
+					 		searchKeyword : $("input[name=searchKeyword]").val(),
+					 		searchCondition : $("select[name=searchCondition]").val()
+					   }),
+				 dataType : "text",
+				 success : function(serverData, status){
+					
+					var array = JSON.parse(serverData);
+				
+					//alert(array);
+					$("input#auto").autocomplete({
+						source : array
+					});
+					
+				 }
+			
+			 });
+			
+		}
+		
 		//==>"검색" ,  userId link  Event 연결 및 처리
 		 $(function() {
+			 
+			 
+			 //////////////////////수정 autocomplete
+			 
+				$("input[name=searchKeyword]").keyup( function(){
+					
+					//alert("keyup");
+					
+					var searchCondition =  $("select[name=searchCondition]").val();
+					//alert($("select[name=searchCondition]").val());
+					
+					fncAutoComplete();
+				});
+			 
+			 
+			 
 			 
 			//==> 검색 Event 연결처리부분
 			//==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
@@ -122,9 +172,9 @@
 				<option value="0"  ${ ! empty search.searchCondition && search.searchCondition==0 ? "selected" : "" }>회원ID</option>
 				<option value="1"  ${ ! empty search.searchCondition && search.searchCondition==1 ? "selected" : "" }>회원명</option>
 			</select>
-			<input type="text" name="searchKeyword" 
+			<input type="text" name="searchKeyword" id="auto"
 						value="${! empty search.searchKeyword ? search.searchKeyword : ""}"  
-						class="ct_input_g" style="width:200px; height:20px" > 
+						class="ct_input_g" style="width:200px; height:20px" />
 		</td>
 		<td align="right" width="70">
 			<table border="0" cellspacing="0" cellpadding="0">

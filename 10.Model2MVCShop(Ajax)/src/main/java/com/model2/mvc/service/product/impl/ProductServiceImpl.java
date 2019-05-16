@@ -91,4 +91,10 @@ public class ProductServiceImpl implements ProductService {
 		return list;
 	}
 
+	@Override
+	public List<String> getAllProductList(Search search) {
+		// TODO Auto-generated method stub
+		return productDao.getAllProductList(search);
+	}
+
 }

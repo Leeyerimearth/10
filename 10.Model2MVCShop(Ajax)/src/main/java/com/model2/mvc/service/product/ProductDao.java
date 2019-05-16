@@ -11,7 +11,7 @@ public interface ProductDao {
 	
 	public Product findProduct(int prodNo);
 	
-	public List<Product> getProductList2(Search searc);
+	public List<Product> getProductList2(Search search);
 	
 	public List<Product> getProductList(Search search);
 	
@@ -26,4 +26,6 @@ public interface ProductDao {
 	public int getTotalCount(Search search) throws Exception ;
 	
 	public List<Product> getBestSellerList();
+	
+	public List getAllProductList(Search search);
 }

@@ -80,4 +80,11 @@ public class UserServiceImpl implements UserService{
 		}
 		return result;
 	}
+
+	@Override
+	public List getAllUserList(Search search) throws Exception {
+		// TODO Auto-generated method stub
+		
+		return userDao.getAllUserList(search);
+	}
 }

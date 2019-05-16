@@ -114,7 +114,11 @@ public class ProductController {
 									@RequestParam("menu") String menu) throws Exception
 	{
 		System.out.println("/product/listProduct");
-		
+		System.out.println(search.getOrderCondition());
+		if(search.getOrderCondition()== null)
+		{
+			search.setOrderCondition("100"); //원래 처음 정렬(prod_no)  1 높은가격순 2 낮은가격순
+		}
 		if(search.getCurrentPage() ==0 ){
 			search.setCurrentPage(1);
 		}

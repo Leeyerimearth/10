@@ -29,8 +29,14 @@
 <head>
 <title>상품 목록조회</title>
 
+
+<meta charset="EUC-KR">
+
 <link rel="stylesheet" href="/css/admin.css" type="text/css">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
 <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 
 <script type="text/javascript">
@@ -44,6 +50,39 @@
 		//document.getElementById("currentPage").value = currentPage;
 		//document.detailForm.submit();
 	}
+	
+	function fncAutoComplete(){
+		
+		$.ajax({
+			
+			 url :"/common/json/autocomplete",
+			 method : "POST",
+			 headers : { // 보내는거 json
+					"Accept" : "application/json",
+					"Content-Type" : "application/json"
+				},
+			 data: JSON.stringify({ //보내는 data jsonString 화
+				 		table : "product",
+				 		searchKeyword : $("input[name=searchKeyword]").val(),
+				 		searchCondition : $("select[name=searchCondition]").val()
+				   }),
+			 dataType : "text",
+			 success : function(serverData, status){
+				
+				var array = JSON.parse(serverData);
+			
+				//alert(array);
+				$("input#auto").autocomplete({
+					source : array
+				});
+				
+			 }
+		
+		 });
+		
+	}
+	
+	
 
 	$(function(){ 
 	
@@ -65,12 +104,17 @@
 		$("#before").on("click", function(){
 			
 			fncGetUserList('${ resultPage.currentPage-1}');
-		})
+		});
 		
 		$("#after").on("click", function(){
 			
 			fncGetUserList('${resultPage.endUnitPage+1}');
-		})
+		});
+		
+		$("input[name=searchKeyword]").keyup(function() {
+
+			fncAutoComplete();
+		});
 		
 	
 		//productName글씨 빨간색으로 변경	
@@ -148,7 +192,7 @@
 					<option value="2" ${!empty search.searchCondition && search.searchCondition==2 ? "selected" : "" }>상품가격</option>
 			</select>
 				    <input type ="text" name="searchKeyword" value="${!empty search.searchKeyword ? search.searchKeyword : "" }"
-				    	class="ct_input_g" style ="width:200px; height:19px">
+				    	id="auto" class="ct_input_g" style ="width:200px; height:19px">
 		 </td>
 		<td align="right" width="70">
 			<table border="0" cellspacing="0" cellpadding="0">

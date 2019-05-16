@@ -23,7 +23,7 @@
 			var name=$("input[name='userName']").val();
 			
 			
-			if(id == null || id.length <1){
+			if(id == null || id.length <1 || $(".ct_write01:contains('사용 가능')")){ //추가
 				alert("아이디는 반드시 입력하셔야 합니다.");
 				return;
 			}
@@ -164,7 +164,7 @@
 					 }
 					 
 					 $("#append").remove();
-					 resultString = "<div id='append'>"+resultString+"</div>";
+					 resultString = "<span id='append'>"+resultString+"</span>";
 					 
 					// alert($("input[name=userId]").parent().parent().html());
 					 $("input[name=userId]").parent().append($(resultString)).css('color','blue');
@@ -180,7 +180,10 @@
 		     var pw_confirm=$("input[name='password2']").val();
 		     
 		     if(pw==pw_confirm){
-		    	 $("input[name='password2']").parent().append("일치").css('color','green');
+		    	 $("input[name='password2']").parent().append($("<span id='pwdcheck'>일치</span>")).css('color','green');
+		     }
+		     else{
+		    	 $("#pwdcheck").remove();
 		     }
 		     
 		 
@@ -211,7 +214,7 @@
 			});
 			
 			$("input[name=password2]").keyup( function(){
-				
+				//alert("dk");
 				checkPassword();
 			})
 			
