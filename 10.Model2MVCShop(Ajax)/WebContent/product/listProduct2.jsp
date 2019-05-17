@@ -236,6 +236,8 @@
 		<td class="ct_line02"></td>
 		<td class="ct_list_b">등록일</td>	
 		<td class="ct_line02"></td>
+		<td class="ct_list_b">재 고</td>	
+		<td class="ct_line02"></td>
 		<td class="ct_list_b">현재상태</td>	
 	</tr>
 	<tr>
@@ -284,15 +286,17 @@
 			<td></td>
 			<td align="left">${product.regDate}</td>
 			<td></td>
+			<td align="left">${product.quantity} 개</td>
+			<td></td>
 			
 			<c:set var="nowState" value=""/>
 			 <c:if test="${product.quantity >= 1}">
 			 	<c:set var="nowState" value="판매중"/>
-			 	<td align="left">${nowState}
+			 	<td align="center">${nowState}
 			 </c:if>
 			 <c:if test="${product.quantity <= 0}">
 			 	<c:set var="nowState" value="품절"/>
-			 	<td align="left">${nowState}
+			 	<td align="center">${nowState}
 			 </c:if>
 		
 		</tr>

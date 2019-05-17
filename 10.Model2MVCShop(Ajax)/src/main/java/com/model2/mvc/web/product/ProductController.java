@@ -72,6 +72,8 @@ public class ProductController {
 		System.out.println(cookieString);
 		
 		session.setAttribute("vo", vo);
+		
+		
 		String menu = (String) session.getAttribute("menu");
 		System.out.println(menu);
 		

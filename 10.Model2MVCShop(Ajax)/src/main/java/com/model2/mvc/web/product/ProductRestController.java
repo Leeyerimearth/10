@@ -62,8 +62,8 @@ public class ProductRestController {
 
 	}
 	
-	@RequestMapping(value="/json/getProduct", method=RequestMethod.GET) //2019.05.13
-	public Product getProduct(@RequestParam("prodNo") String prodNo, HttpServletRequest request,
+	@RequestMapping(value="/json/getProduct/{prodNo}", method=RequestMethod.GET) //2019.05.13
+	public Product getProduct(@PathVariable String prodNo, HttpServletRequest request,
 									HttpServletResponse response, HttpSession session) throws Exception
 	{
 		System.out.println("/product/json/getProduct");

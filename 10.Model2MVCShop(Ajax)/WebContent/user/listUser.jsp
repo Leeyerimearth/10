@@ -96,6 +96,14 @@
 					//self.location ="/user/getUser?userId="+$(this).text().trim();
 					////////////////////////////////////////////////////////////////////////////////////////////
 					var userId = $(this).text().trim();
+					var context = $("h3").text().trim();
+				
+					if(context.indexOf(userId)!= -1){ //이전에 클릭했던애 클릭했을때 지워지기
+					
+						$("h3").remove();
+						return;
+					}
+					////////////////////////////////////////////////////////////// 수정
 					$.ajax( 
 							{
 								url : "/user/json/getUser/"+userId ,
