@@ -57,6 +57,8 @@ public class PurchaseController {
 		System.out.println("/purchase/addPurchase POST방식");
 		
 		User user = (User) session.getAttribute("user");
+		
+		
 		Product product = (Product) session.getAttribute("vo");
 		
 	
@@ -93,9 +95,15 @@ public class PurchaseController {
 	}
 	
 	@RequestMapping(value="addPurchase", method=RequestMethod.GET)
-	public String addPurchase()
+	public String addPurchase(@RequestParam(value="prodNo",required = false)int prodNo , HttpSession session) throws Exception
 	{
 		System.out.println("/purchase/addPurchase GET방식");
+		
+		if(prodNo!=0) //원래는 prodNo 필요없는 그냥 navigation, getProduct 건너뛰고 넘어가면 getProduct 해야한다.
+		{	
+			Product product = productService.getProduct(prodNo);
+			session.setAttribute("vo", product);
+		}
 		
 		return "forward:/purchase/addPurchase.jsp";
 	}
@@ -108,7 +116,7 @@ public class PurchaseController {
 		Purchase purchase = purchaseService.getPurchase(tranNo);
 		
 		model.addAttribute("purchase", purchase);
-		
+		System.out.println(purchase.getTranCode());
 		return "forward:/purchase/getPurchase.jsp";
 	}
 	
@@ -214,19 +222,37 @@ public class PurchaseController {
 	}
 	
 	@RequestMapping(value= "updateTranCode" , method= RequestMethod.GET)
-	public String updateTranCode(@RequestParam("tranNo") int tranNo, HttpSession session) throws Exception
+	public String updateTranCode(@RequestParam("tranNo") int tranNo, HttpSession session,
+								@RequestParam(value="tranCode",required = false) String tranCode) throws Exception
 	{
 		
 		System.out.println("/purchase/updateTranCode");
+		System.out.println("tranCode: " +tranCode);
+		
 		
 		//Purchase purchase = purchaseService.getPurchase2(prodNo);
 		User user = (User) session.getAttribute("user");
 		Purchase purchase = purchaseService.getPurchase(tranNo); //tranNo로 수정
-		purchaseService.updateTranCode(purchase);
+	
 		
+		if(tranCode.equals("005")) //구매취소일때
+		{
+			
+			purchase.setTranCode(tranCode); //구매취소는 VO tranCode를  005로셋팅
+			purchase.setPayAmount(0);
+			if(purchase.getPaymentOption().equals("ca"))
+			{
+				purchase.setPaymentOption("1");
+			}
+			else
+				purchase.setPaymentOption("2");
+			purchaseService.updatePurcahse(purchase); //구매취소하면 pay_amount를 0을 만들어버림
+		}
+		
+		purchaseService.updateTranCode(purchase);// tranCode set은 여기서
 		
 		////////////////////////////////////////////////////////////////////////////2%point설정(배송완료됐을때)
-		if( Integer.parseInt(purchase.getTranCode())==2)
+		if( Integer.parseInt(purchase.getTranCode())==2) //002배송중~~~> 003배송완료 하면~
 		{
 			//배송완료이면, getproduct해서, userPoint update
 			Product product =productService.getProduct(purchase.getPurchaseProd().getProdNo());
@@ -237,13 +263,13 @@ public class PurchaseController {
 			user.setUserPoint(newPoint);
 			
 			//transaction의 pay_amount를 user Table의 new user total_Payment의 기존값과 더해준다.
-			//이걸 컨트롤러에서 해주는게 맞을까? 컨트롤러의 목적
+			//이걸 컨트롤러에서 해주는게 맞을까? 컨트롤러의 목적  // userTotal payment  배송완료일때 바꾼다.
 			user.setTotalPayment(user.getTotalPayment()+purchase.getPayAmount());
 			// 						기존의 tatalPayment + 제품에대해 최종 구매한 값
 			
-			userService.updateUser(user,"addPoint"); //updateUser를 사용할까?
+			userService.updateUser(user,"addPoint"); //updateUser를 사용할까? DB저장하네??
 			/////////////////////////////////////////////////////////////////////////
-			//
+	
 		}	
 		//if(user.getUserId().equals("admin")) 수정 왜냐면 user든 admin이든 listPurchase.do로 갈수있다.
 			//return "forward:/listSale.do";

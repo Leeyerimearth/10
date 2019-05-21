@@ -1,4 +1,5 @@
 <%@ page contentType="text/html; charset=euc-kr" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <%-- 
 <%@ page import ="com.model2.mvc.service.domain.User"%>
@@ -101,22 +102,7 @@ function fncAddPurchase() {
 <input type="hidden" name="prodNo" value="${sessionScope.vo.prodNo}" />
 
 <table width="600" border="0" cellspacing="0" cellpadding="0"	align="center" style="margin-top: 13px;">
-	<tr>
-		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-	</tr>
-	<tr>
-		<td width="300" class="ct_write">
-			상품번호 <img src="/images/ct_icon_red.gif" width="3" height="3" align="absmiddle"/>
-		</td>
-		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01" width="299">
-			<table width="100%" border="0" cellspacing="0" cellpadding="0">
-				<tr>
-					<td width="105">${sessionScope.vo.prodNo}</td>
-				</tr>
-			</table>
-		</td>
-	</tr>
+
 	<tr>
 		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
 	</tr>
@@ -151,7 +137,9 @@ function fncAddPurchase() {
 	<tr>
 		<td width="104" class="ct_write">가격</td>
 		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01">${sessionScope.vo.price}</td>
+		<td class="ct_write01">
+			<fmt:formatNumber value="${sessionScope.vo.price}" groupingUsed="true"/> 원
+		</td>
 	</tr>
 	<tr>
 		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
@@ -203,7 +191,7 @@ function fncAddPurchase() {
 		<td width="104" class="ct_write">사용 포인트</td>
 		<td bgcolor="D6D6D6" width="1"></td>
 		<td class="ct_write01">
-			<input type ="text" name="usePoint" class="ct_input_g" value=""
+			<input type ="text" name="usePoint" class="ct_input_g" value="0"
 					style="width: 70px; height: 19px" maxLength="20"/>
 			p(* 100p 단위로 사용가능합니다.)
 			  <!-- 이렇게하면, 포인트 조회를 누르는게아니라, 이안에 td다 누르면 작동 -->

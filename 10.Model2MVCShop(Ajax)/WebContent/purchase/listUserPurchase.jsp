@@ -210,6 +210,9 @@
 		<c:if test="${purchase.tranCode=='004'}">
 			구매완료
 		</c:if>
+		<c:if test="${purchase.tranCode=='005'}">
+			구매취소
+		</c:if>
 		</td>
 		<td></td>
 		<%--

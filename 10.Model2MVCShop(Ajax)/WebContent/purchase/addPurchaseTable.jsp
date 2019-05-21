@@ -1,4 +1,6 @@
 <%@ page contentType="text/html; charset=euc-kr" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
 
 <%--
 <%@ page import ="com.model2.mvc.service.domain.Product" %>
@@ -47,7 +49,12 @@
 	<tr>
 		<td>구매방법</td>
 		<td>
-			${param.paymentOption}
+		<c:if test="${param.paymentOption=='1'}">
+			현금구매
+		</c:if>
+		<c:if test="${param.paymentOption=='2'}">
+			신용구매
+		</c:if>
 		</td>
 		<td></td>
 	</tr>

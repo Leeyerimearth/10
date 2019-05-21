@@ -104,11 +104,18 @@
 	  <if test="paymentOption==0">
 	    payment_option = 'cd',
 	   </if>
+	   <if test="paymentOption=='ca'">
+	    payment_option = 'ca',
+	   </if>
+	  <if test="paymentOption=='cd'">
+	    payment_option = 'cd',
+	   </if>
 	    receiver_name = #{receiverName:VARCHAR},
 	    receiver_phone = #{receiverPhone:VARCHAR},
 	    demailaddr= #{divyAddr:VARCHAR},
 	    dlvy_request = #{divyRequest:VARCHAR},
-	    dlvy_date = TO_DATE(#{divyDate},'yyyy-mm-dd')
+	    dlvy_date = TO_DATE(#{divyDate},'yyyy-mm-dd'),
+	    pay_amount = #{payAmount:NUMERIC}
 	</set>
 		WHERE tran_no = #{tranNo}
 	</update>
@@ -119,6 +126,7 @@
 		SET 
 		<if test="tranCode=='004'">tran_status_code = '002'</if> 
 		<if test="tranCode=='002'">tran_status_code = '003'</if> 
+		<if test="tranCode=='005'">tran_status_code = '005'</if> 
 		WHERE tran_no = #{tranNo}
 	</update>
 	

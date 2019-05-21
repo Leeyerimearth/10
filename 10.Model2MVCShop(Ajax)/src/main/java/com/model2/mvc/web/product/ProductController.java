@@ -48,7 +48,7 @@ public class ProductController {
 					@RequestParam("multifile") MultipartFile multipartFile) throws Exception
 	{
 		System.out.println("/product/addProduct");
-		
+		System.out.println("multipartFile :_"+multipartFile+"_");
 		System.out.println(multipartFile.getName()); //attribute name의 값
 		System.out.println(multipartFile.getOriginalFilename());//파일의 name
 		
